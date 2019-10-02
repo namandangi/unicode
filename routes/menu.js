@@ -12,11 +12,11 @@ let router = express.Router();
                 price : req.query.price,
                 isVegetarian : req.query.veg,
                 isJainAvailable : req.query.jain,     
-                restaurant : req.query.r           
+                //restaurant : req.query.r           
             }             
 
             console.log(req.query,req.body,req.params,dishDetails);
-            ResDetails.findById(req.params.id).populate('restaurant').exec((err,restaurant)=>{
+            ResDetails.findById(req.params.id,(err,restaurant)=>{
                 if(!err)
                 {
                     menuItems.create(dishDetails,(err,mi)=>{
@@ -41,7 +41,7 @@ let router = express.Router();
              ResDetails.findById(req.params.id,(err,restaurant)=>{
                  if(!err)
                 {
-                    menuItems.find({}).populate('restaurant').exec((err,menu)=>{
+                    menuItems.find({},(err,menu)=>{
                         res.status(200).json(menu);
                     });
                 }
@@ -68,7 +68,7 @@ let router = express.Router();
                 price : req.query.price,
                 isVegetarian : req.query.veg,
                 isJainAvailable : req.query.jain,             
-                restaurant : req.query.r    
+                //restaurant : req.query.r    
             }
             console.log(dishDetails);
             ResDetails.findById(req.params.rid,(err,restaurant)=>{
