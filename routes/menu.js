@@ -11,25 +11,28 @@ let router = express.Router();
                 dishName : req.query.dname,
                 price : req.query.price,
                 isVegetarian : req.query.veg,
-                isJainAvailable : req.query.jain,
-                //category : req.query.c
-                //category : ''
-            }
-             //sample test data not required since post query is working
-            // var resDetails = {
-            //     restaurantName : 'TEAVILLA CAFE',
-            //     phone : 28844324,
-            //     address : 'THAKUR VILLGE KANDIVALI EAST',
-            //     email : 'teavillacafe@gmail.com',
-            // }       
+                isJainAvailable : req.query.jain,     
+                restaurant : req.query.r           
+            }             
 
             console.log(req.query,req.body,req.params,dishDetails);
-            menuItems.create(dishDetails,(err,rD)=>{
+            ResDetails.findById(req.params.id).populate('restaurant').exec((err,restaurant)=>{
                 if(!err)
-                console.log(`created ${rD}`);
-                else
-                console.log(err);
+                {
+                    menuItems.create(dishDetails,(err,mi)=>{
+                        if(!err){
+                            console.log(`created ${mi}`);
+                            mi.save();
+                            restaurant.menu.push(mi);
+                            restaurant.save();
+                        }
+                        
+                        else
+                        console.log(err);
+                    });
+                }
             });
+            
                 res.redirect('/r/'+req.params.id+'/menu');
         });
 
@@ -38,7 +41,7 @@ let router = express.Router();
              ResDetails.findById(req.params.id,(err,restaurant)=>{
                  if(!err)
                 {
-                    menuItems.find({},(err,menu)=>{
+                    menuItems.find({}).populate('restaurant').exec((err,menu)=>{
                         res.status(200).json(menu);
                     });
                 }
@@ -57,14 +60,6 @@ let router = express.Router();
             });
         });
 
-        //not required since initally was used to display a form
-        //EDIT DETAILS
-        //router.get('/r/:id/edit',(req,res)=>{
-        //     ResDetails.findById(req.params.id,(err,detail)=>{
-        //         if(!err){
-        //             res.status(200).json(detail);
-        //     }});
-        // });  
         
         //UPDATE DISH DETAILS
          router.put('/r/:rid/menu/:id/edit',(req,res)=>{
@@ -72,9 +67,8 @@ let router = express.Router();
                 dishName : req.query.dname,
                 price : req.query.price,
                 isVegetarian : req.query.veg,
-                isJainAvailable : req.query.jain,
-                //category : req.query.c
-                //category : ''
+                isJainAvailable : req.query.jain,             
+                restaurant : req.query.r    
             }
             console.log(dishDetails);
             ResDetails.findById(req.params.rid,(err,restaurant)=>{

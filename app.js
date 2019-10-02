@@ -1,10 +1,3 @@
-// const   express         = require('express'),
-//         mongoose        = require('mongoose'),
-//         ResDetails      = require('./models/restaurantDetails'),
-//         bodyParser      = require('body-parser'),
-//         methodOverride  = require('method-override'),
-//         app             = express();
-
         import express from 'express';
         import mongoose from 'mongoose';
         //import ResDetails from './models/restaurantDetails';
@@ -24,6 +17,11 @@
 
         app.use(menu);
         app.use(restaurant);
+
+        //DIRECT ALL ROUTES TO RESTAURANT LIST
+        app.get('*',(req,res)=>{
+            res.redirect('/r');
+        })
     
         app.listen(process.env.PORT||3000,process.env.IP,()=>{
             console.log('listening on port 3000');

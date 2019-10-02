@@ -8,12 +8,13 @@ let router = express.Router();
         // })   
         
         //CREATE NEW RESTAURANTDATA
-         router.post('/',(req,res)=>{
+         router.post('/r',(req,res)=>{
             var resDetails = {
                 restaurantName : req.query.rname,
                 phone : req.query.phone,
                 address : req.query.address,
                 email : req.query.email,
+                menu : req.query.menu
             }
              //sample test data not required since post query is working
             // var resDetails = {
@@ -28,11 +29,11 @@ let router = express.Router();
                 if(!err)
                 console.log(`created ${rD}`);
             });
-                res.redirect('/');
+                res.redirect('/r');
         });
 
         //DISPLAY ALL RESTAURANT DATA
-         router.get('/',(req,res)=>{
+         router.get('/r',(req,res)=>{
             ResDetails.find({},(err,arD)=>{
                 if(!err)
                 { 
@@ -44,7 +45,7 @@ let router = express.Router();
 
         //DISPLAY SPECIFIC RESTAURANT DETAILS
          router.get('/r/:id',(req,res)=>{
-            ResDetails.findById(req.params.id,(err,rd)=>{
+            ResDetails.findById(req.params.id).populate("menu").exec((err,rd)=>{
                 if(!err)
                 {
                     res.status(200).json(rd);

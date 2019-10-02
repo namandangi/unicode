@@ -5,10 +5,10 @@ var menuItemSchema = new mongoose.Schema({
     price : Number,
     isVegetarian : {type:Boolean , default :true},
     isJainAvailable : {type:Boolean ,default :false},
-    // category : {
-    //     type : mongoose.Schema.Types.ObjectId,
-    //     ref : 'menuItemCategories'
-    // }
+    restaurant : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'restaurantDetail'
+    }
 });
 
 export default mongoose.model('menuItem',menuItemSchema);

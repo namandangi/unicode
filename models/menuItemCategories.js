@@ -11,10 +11,6 @@ categoryName : String,
 menuItem : {
     type : mongoose.Schema.Types.ObjectId,
     ref : 'menuItems'
-},
-resDetails : {
-    type : mongoose.Schema.Types.ObjectId,
-    ref : 'restaurantDetails'
 }
 });
 
