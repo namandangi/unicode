@@ -12,7 +12,7 @@ let router = express.Router();
                 price : req.query.price,
                 isVegetarian : req.query.veg,
                 isJainAvailable : req.query.jain,     
-                //restaurant : req.query.r           
+                //restaurant : req.params.id           
             }             
 
             console.log(req.query,req.body,req.params,dishDetails);
@@ -22,6 +22,9 @@ let router = express.Router();
                     menuItems.create(dishDetails,(err,mi)=>{
                         if(!err){
                             console.log(`created ${mi}`);
+// The line below saves a menu item to a particular restaurant 
+//without this line any item added to a particular restaurant;s menu will be added to all restuarant;s menu
+                            mi.restaurantid = req.params.id; 
                             mi.save();
                             restaurant.menu.push(mi);
                             restaurant.save();
@@ -41,7 +44,7 @@ let router = express.Router();
              ResDetails.findById(req.params.id,(err,restaurant)=>{
                  if(!err)
                 {
-                    menuItems.find({},(err,menu)=>{
+                    menuItems.find({restaurantid:req.params.id},(err,menu)=>{
                         res.status(200).json(menu);
                     });
                 }

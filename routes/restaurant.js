@@ -34,7 +34,7 @@ let router = express.Router();
 
         //DISPLAY ALL RESTAURANT DATA
          router.get('/r',(req,res)=>{
-            ResDetails.find({},(err,arD)=>{
+            ResDetails.find({}).populate('menu').exec((err,arD)=>{
                 if(!err)
                 { 
                     console.log(arD);

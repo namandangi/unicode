@@ -8,7 +8,9 @@ var restaurantDetailSchema = new mongoose.Schema({
     menu : [{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'menuItem'
-    }]
+    }
+//dishName : String
+]
 });
 
 
