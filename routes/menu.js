@@ -15,7 +15,7 @@ let router = express.Router();
                 //restaurant : req.params.id           
             }             
 
-            console.log(req.query,req.body,req.params,dishDetails);
+            console.log(dishDetails);
             ResDetails.findById(req.params.id,(err,restaurant)=>{
                 if(!err)
                 {
