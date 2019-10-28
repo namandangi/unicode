@@ -8,7 +8,7 @@ let router = express.Router();
         // })   
         
         //CREATE NEW RESTAURANTDATA
-         router.post('/r',(req,res)=>{
+         router.post('/restaurants',(req,res)=>{
             var resDetails = {
                 restaurantName : req.query.rname,
                 phone : req.query.phone,
@@ -29,11 +29,11 @@ let router = express.Router();
                 if(!err)
                 console.log(`created ${rD}`);
             });
-                res.redirect('/r');
+                res.redirect('/restaurants');
         });
 
         //DISPLAY ALL RESTAURANT DATA
-         router.get('/r',(req,res)=>{
+         router.get('/restaurants',(req,res)=>{
             ResDetails.find({}).populate('menu' ,'dishName -_id').exec((err,arD)=>{
                 if(!err)
                 { 
@@ -44,7 +44,7 @@ let router = express.Router();
         })
 
         //DISPLAY SPECIFIC RESTAURANT DETAILS
-         router.get('/r/:id',(req,res)=>{
+         router.get('/restaurants/:id',(req,res)=>{
             ResDetails.findById(req.params.id).populate("menu").exec((err,rd)=>{
                 if(!err)
                 {
@@ -55,7 +55,7 @@ let router = express.Router();
 
         //not required since initally was used to display a form
         //EDIT DETAILS
-        //router.get('/r/:id/edit',(req,res)=>{
+        //router.get('/restaurants/:id/edit',(req,res)=>{
         //     ResDetails.findById(req.params.id,(err,detail)=>{
         //         if(!err){
         //             res.status(200).json(detail);
@@ -63,7 +63,7 @@ let router = express.Router();
         // });  
         
         //UPDATE DETAILS
-         router.put('/r/:id/edit',(req,res)=>{
+         router.put('/restaurants/:id/edit',(req,res)=>{
             var resDetails = {
                 restaurantName : req.query.rname,
                 phone : req.query.phone,
@@ -72,12 +72,12 @@ let router = express.Router();
             }
             ResDetails.findByIdAndUpdate(req.params.id,resDetails,(err,uD)=>{
                 console.log(`updated ${uD}`);
-                res.redirect('/r/'+req.params.id);
+                res.redirect('/restaurants/'+req.params.id);
             });
         });
 
         //DELETE RESTAURANT
-         router.delete('/r/:id/delete',(req,res)=>{
+         router.delete('/restaurants/:id/delete',(req,res)=>{
             ResDetails.findByIdAndDelete(req.params.id,(err,delr)=>{
                 console.log(`deleted ${delr}`);
                 res.redirect('/');

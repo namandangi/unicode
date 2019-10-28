@@ -26,7 +26,7 @@ var opts = {}
     }));        
 
 //SIGNUP LOGIC
-router.post('/u/signup',(req,res)=>{
+router.post('/user/signup',(req,res)=>{
     //  var username : req.query.uname;
     //  var password : req.query.pass;    
     var nuser  = {
@@ -41,7 +41,7 @@ router.post('/u/signup',(req,res)=>{
 });
 
 //LOGIN LOGIC ~STORES TOKENS IN COOKIES
-router.post('/u/login',(req,res)=>{
+router.post('/user/login',(req,res)=>{
     user.findOne({username:req.query.uname,password:req.query.pass},(err,user)=>{
         if(!err){
             var payload = {id: user.id};
@@ -49,7 +49,7 @@ router.post('/u/login',(req,res)=>{
             res.cookie('auth',token);//STORING TOKEN IN COOKIE
             console.log({message: "ok", token: token});
           //  res.json({message: "ok", token: token});
-            res.redirect('/u/'+user.id);                        
+            res.redirect('/user/'+user.id);                        
         }
         else
         return res.send(err);
@@ -63,7 +63,7 @@ router.post('/u/login',(req,res)=>{
 
 //CUSTOM MIDDLEWARE TO VERIFY A USER WITH A TOKEN STORED IN COOKIES
 //USER PROFILE PAGE
-router.get('/u/:id',(request,response,next)=>
+router.get('/user/:id',(request,response,next)=>
 {
     var token = request.cookies.auth;
 

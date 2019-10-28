@@ -6,7 +6,7 @@ import menuItemCategory from '../models/menuItemCategories';
 let router = express.Router();
         
         //ADD NEW DISH
-         router.post('/r/:id/menu/',(req,res)=>{
+         router.post('/restaurants/:id/menu/',(req,res)=>{
             var dishDetails = {                
                 dishName : req.query.dname,
                 price : req.query.price,
@@ -36,11 +36,11 @@ let router = express.Router();
                 }
             });
             
-                res.redirect('/r/'+req.params.id+'/menu');
+                res.redirect('/restaurants/'+req.params.id+'/menu');
         });
 
         //DISPLAY ALL DISHES
-         router.get('/r/:id/menu/',(req,res)=>{
+         router.get('/restaurants/:id/menu/',(req,res)=>{
              ResDetails.findById(req.params.id,(err,restaurant)=>{
                  if(!err)
                 {
@@ -52,7 +52,7 @@ let router = express.Router();
         });
 
         //DISPLAY SPECIFIC DISH DETAILS
-         router.get('/r/:rid/menu/:id',(req,res)=>{
+         router.get('/restaurants/:rid/menu/:id',(req,res)=>{
             ResDetails.findById(req.params.rid,(err,rd)=>{
                 if(!err)
                 {
@@ -65,7 +65,7 @@ let router = express.Router();
 
         
         //UPDATE DISH DETAILS
-         router.put('/r/:rid/menu/:id/edit',(req,res)=>{
+         router.put('/restaurants/:rid/menu/:id/edit',(req,res)=>{
             var dishDetails = {                
                 dishName : req.query.dname,
                 price : req.query.price,
@@ -80,20 +80,20 @@ let router = express.Router();
                 menuItems.findByIdAndUpdate(req.params.id,dishDetails,(err,uD)=>
                 {
                     console.log(`updated ${uD}`);
-                    res.redirect('/r/'+req.params.rid+'/menu/'+req.params.id);
+                    res.redirect('/restaurants/'+req.params.rid+'/menu/'+req.params.id);
                 });
                 }
             });            
         });
 
         //DELETE DISH
-         router.delete('/r/:rid/menu/:id/delete',(req,res)=>{             
+         router.delete('/restaurants/:rid/menu/:id/delete',(req,res)=>{             
             ResDetails.findById(req.params.rid,(err,restaurant)=>{
                 if(!err)
                     {
                         menuItems.findByIdAndDelete(req.params.id,(err,delr)=>{
                         console.log(`deleted ${delr}`);
-                        res.redirect('/r/'+req.params.rid+'/menu/');
+                        res.redirect('/restaurants/'+req.params.rid+'/menu/');
                     });
                     }
              });
