@@ -12,6 +12,8 @@
         var JwtStrategy = require('passport-jwt').Strategy,
             ExtractJwt = require('passport-jwt').ExtractJwt;
             var cookieParser = require('cookie-parser');
+            var datetime = new Date();
+            var dateTime = require('node-datetime');        
         let app  = express();    
         const http = require("http").Server(app);
         const io = require("socket.io")(http);
@@ -38,26 +40,35 @@
         // app.get('*',(req,res)=>{
         //     res.redirect('/r');
         // })
+        
+io.on("connection", function(socket) {
 
-    io.on("connection", function(socket) {
+    socket.on("user_join", function(data) {
+        this.username = data;
+        socket.broadcast.emit("user_join", data);
+        //console.log(Date.now());
+        console.log(datetime.toISOString().slice(0,10));
+        var dt = dateTime.create();
+        var formatted = dt.format('D-m-Y H:M:S');
+        console.log(this.username+" connected at : "+formatted);
+    });
 
-        socket.on("user_join", function(data) {
-            this.username = data;
-            socket.broadcast.emit("user_join", data);
-        });
+    socket.on("chat_message", function(data) {
+        data.username = this.username;
+        socket.broadcast.emit("chat_message", data);
+    });
 
-        socket.on("chat_message", function(data) {
-            data.username = this.username;
-            socket.broadcast.emit("chat_message", data);
-        });
-
-        socket.on("disconnect", function(data) {
-            socket.broadcast.emit("user_leave", this.username);
-    	});
-    })
+    socket.on("disconnect", function(data) {
+        socket.broadcast.emit("user_leave", this.username);
+        //console.log(Date.now());
+        console.log(datetime.toISOString().slice(0,10));
+        var dt = dateTime.create();
+        var formatted = dt.format('D-m-Y H:M:S');
+        console.log(this.username+" left at : "+formatted);
+    });
+});
 
         let server = http.listen(process.env.PORT||3000,process.env.IP,()=>{
             console.log('listening on port 3000');
         });
       
-
