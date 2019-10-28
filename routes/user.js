@@ -23,7 +23,7 @@ var opts = {}
             }
             console.log(jwt_payload);
         });
-        }));        
+    }));        
 
 //SIGNUP LOGIC
 router.post('/u/signup',(req,res)=>{
