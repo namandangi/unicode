@@ -26,47 +26,46 @@
         app.use(methodOverride('_method'));
         app.use(cookieParser());
         app.use(passport.initialize());
-        mongoose.connect('mongodb://localhost:27017/uni1', {useNewUrlParser: true});
+        mongoose.connect('mongodb://localhost:27017/uni1', {useNewUrlParser: true});                    
 
-        
+
+       //Socket.io Setup 
+        io.on("connection", function(socket) {
+
+        socket.on("user_join", function(data) {
+            this.username = data;
+            socket.broadcast.emit("user_join", data);
+            //console.log(Date.now());
+            console.log(datetime.toISOString().slice(0,10));
+            var dt = dateTime.create();
+            var formatted = dt.format('D-m-Y H:M:S');
+            console.log(this.username+" connected at : "+formatted);
+        });
+
+        socket.on("chat_message", function(data) {
+            data.username = this.username;
+            socket.broadcast.emit("chat_message", data);
+        });
+
+        socket.on("disconnect", function(data) {
+            socket.broadcast.emit("user_leave", this.username);
+            //console.log(Date.now());
+            console.log(datetime.toISOString().slice(0,10));
+            var dt = dateTime.create();
+            var formatted = dt.format('D-m-Y H:M:S');
+            console.log(this.username+" left at : "+formatted);
+        });
+    });
 
         app.use(menu);
         app.use(restaurant);
-        app.use(User);
+        app.use(User);        
         app.use(Chat);
-        
 
-        //DIRECT ALL ROUTES TO RESTAURANT LIST
+       //DIRECT ALL ROUTES TO RESTAURANT LIST
         // app.get('*',(req,res)=>{
         //     res.redirect('/r');
         // })
-        
-io.on("connection", function(socket) {
-
-    socket.on("user_join", function(data) {
-        this.username = data;
-        socket.broadcast.emit("user_join", data);
-        //console.log(Date.now());
-        console.log(datetime.toISOString().slice(0,10));
-        var dt = dateTime.create();
-        var formatted = dt.format('D-m-Y H:M:S');
-        console.log(this.username+" connected at : "+formatted);
-    });
-
-    socket.on("chat_message", function(data) {
-        data.username = this.username;
-        socket.broadcast.emit("chat_message", data);
-    });
-
-    socket.on("disconnect", function(data) {
-        socket.broadcast.emit("user_leave", this.username);
-        //console.log(Date.now());
-        console.log(datetime.toISOString().slice(0,10));
-        var dt = dateTime.create();
-        var formatted = dt.format('D-m-Y H:M:S');
-        console.log(this.username+" left at : "+formatted);
-    });
-});
 
         let server = http.listen(process.env.PORT||3000,process.env.IP,()=>{
             console.log('listening on port 3000');
